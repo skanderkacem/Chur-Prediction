@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churn Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/styles.css">
+    <script>
+        // Function to handle the display of prediction results
+        function displayPredictionResults(results) {
+            const resultDiv = document.getElementById('prediction-results');
+            resultDiv.innerHTML = '';  // Clear previous results
+
+            const resultArray = Object.values(results);
+
+            resultArray.forEach((result, index) => {
+                const div = document.createElement("div");
+                div.classList.add("prediction-item", "p-3", "mb-3", "rounded", "shadow-sm", "bg-light");
+
+                if (result.predictions === 0) {
+                    div.innerHTML = ` 
+                    <h5 class="prediction-title text-primary">Customer ${index + 1}</h5>
+                    <p>This customer is not churning any time soon.</p>`;
+                } else {
+                    div.innerHTML = ` 
+                    <h5 class="prediction-title text-danger">Customer ${index + 1}</h5>
+                    <p>This customer is going to churn.</p>`;
+                }
+
+                resultDiv.appendChild(div);
+            });
+        }
+
+        // Function to handle form submission
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+
+            // Send the CSV file to the server
+            const response = await fetch('/predict_csv', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const results = await response.json();
+                displayPredictionResults(results); // Display results
+            } else {
+                alert('Prediction failed. Please try again.');
+            }
+        }
+    </script>
+</head>
+<body class="bg-light">
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Churn Prediction</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">Churn Prediction API</h1>
+            <p class="lead">Upload customer data and predict churn with ease.</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title text-center text-primary mb-4">Batch Prediction</h2>
+                        <form enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
+                            <div class="mb-4">
+                                <label for="csvFile" class="form-label">Upload your CSV file:</label>
+                                <input type="file" id="csvFile" name="file" accept=".csv" class="form-control" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Upload and Predict</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prediction results section -->
+        <section id="prediction-results" class="mt-5">
+            <!-- Results will be populated here dynamically -->
+        </section>
+    </main>
+
+    <footer class="bg-primary text-white text-center py-3">
+        <div class="container">
+            <p class="mb-0">&copy; 2024 Churn Prediction Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

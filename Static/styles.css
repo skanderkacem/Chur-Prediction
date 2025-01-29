@@ -1,0 +1,55 @@
+/* Root color variables */
+:root {
+    --primary-color: #2F80ED;  /* Bleu ciel */
+    --secondary-color: #56CCF2; /* Bleu clair */
+    --accent-color: #BB6BD9;    /* Violet doux */
+    --light-bg: #F9FAFB;        /* Blanc cassé */
+    --dark-text: #333333;       /* Texte foncé */
+}
+
+/* Body */
+body {
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--primary-color);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Hero Section */
+header {
+    background-color: var(--primary-color);
+}
+
+header .btn-light {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Card Section */
+.card-title {
+    color: var(--secondary-color);
+}
+
+.card-body {
+    border-top: 2px solid var(--accent-color);
+}
+
+/* Footer */
+footer {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Icons */
+.fas {
+    color: var(--primary-color);
+}
